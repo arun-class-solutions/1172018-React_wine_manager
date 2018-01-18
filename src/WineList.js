@@ -1,12 +1,23 @@
 import React, { Component } from "react";
 import axios from "axios";
+import update from "immutability-helper";
 
 class WineList extends Component {
   constructor() {
     super();
 
     this.state = {
-      wines: []
+      wines: [],
+      newWine: {
+        name: "",
+        grapes: "",
+        description: "",
+        price: 0,
+        year: 0,
+        region: "",
+        country: "",
+        picture: ""
+      }
     }
   }
 
@@ -16,6 +27,26 @@ class WineList extends Component {
     .then((response) => {
       this.setState({
         wines: response.data
+      });
+    });
+  }
+
+  handleChange(event) {
+    this.setState(update(this.state, {
+      newWine: {
+        $merge: {
+          [event.target.name]: event.target.value
+        }
+      }
+    }));
+  }
+
+  handleSubmit() {
+    axios
+    .post("http://myapi-profstream.herokuapp.com/api/1717fb/wines", this.state.newWine)
+    .then((response) => {
+      this.setState({
+        wines: this.state.wines.concat(response.data)
       });
     });
   }
@@ -81,54 +112,54 @@ class WineList extends Component {
         					Name
         				</div>
         				<div className="margin-top-20">
-        					<input type="text" className="form-control" />
+        					<input onChange={this.handleChange.bind(this)} name="name" type="text" className="form-control" />
         				</div>
         				<div className="bold margin-top-20">
         					Year
         				</div>
         				<div className="margin-top-20">
-        					<input type="text" className="form-control" />
+        					<input onChange={this.handleChange.bind(this)} name="year" type="text" className="form-control" />
         				</div>
         				<div className="bold margin-top-20">
         					Grapes
         				</div>
         				<div className="margin-top-20">
-        					<input type="text" className="form-control" />
+        					<input onChange={this.handleChange.bind(this)} name="grapes" type="text" className="form-control" />
         				</div>
         				<div className="bold margin-top-20">
         					Country
         				</div>
         				<div className="margin-top-20">
-        					<input type="text" className="form-control" />
+        					<input onChange={this.handleChange.bind(this)} name="country" type="text" className="form-control" />
         				</div>
         				<div className="bold margin-top-20">
         					Region
         				</div>
         				<div className="margin-top-20">
-        					<input type="text" className="form-control" />
+        					<input onChange={this.handleChange.bind(this)} name="region" type="text" className="form-control" />
         				</div>
         				<div className="bold margin-top-20">
         					Price
         				</div>
         				<div className="margin-top-20">
-        					<input type="text" className="form-control" />
+        					<input onChange={this.handleChange.bind(this)} name="price" type="text" className="form-control" />
         				</div>
         				<div className="bold margin-top-20">
         					Picture
         				</div>
         				<div className="margin-top-20">
-        					<input type="text" className="form-control" />
+        					<input onChange={this.handleChange.bind(this)} name="picture" type="text" className="form-control" />
         				</div>
         				<div className="bold margin-top-20">
         					Description
         				</div>
         				<div className="margin-top-20">
-        					<textarea className="form-control"></textarea>
+        					<textarea onChange={this.handleChange.bind(this)} name="description" className="form-control"></textarea>
         				</div>
         			</div>
         			<div className="modal-footer">
         				<button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-        				<button type="button" className="btn btn-primary" data-dismiss="modal">Save Wine</button>
+        				<button onClick={this.handleSubmit.bind(this)} type="button" className="btn btn-primary" data-dismiss="modal">Save Wine</button>
         			</div>
         		</div>
         	</div>
