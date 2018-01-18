@@ -4,6 +4,7 @@ import { Router, Route, Switch } from "react-router-dom";
 import createBrowserHistory from "history/createBrowserHistory";
 
 import WineList from "./WineList";
+import EditWine from "./EditWine";
 
 import "./style.css";
 
@@ -13,6 +14,7 @@ ReactDOM.render(
   <Router history={history}>
     <Switch>
       <Route exact path="/wines" component={WineList} />
+      <Route exact path="/wines/:id" component={EditWine} />
     </Switch>
   </Router>,
   document.getElementById("root")
